@@ -1,5 +1,5 @@
 """
-dirbspy core client module.
+dirbspy core version api module.
 
 MIT License
 
@@ -23,36 +23,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from ..apis.version import Version
+import requests
+
+from dirbspy.exceptions import ConnError
 
 
-class Core(object):
-    """Http client implementation for DIRBS Core."""
+class Version:
+    """Implements core version apis."""
 
-    def __init__(self, host='localhost', port=5000, use_ssl=False):
-        """
-        Constructor.
-        We take http://localhost:5000 as default parameters.
-        """
-        self._host = host
-        self._port = port
-        self.use_ssl = use_ssl
+    def __init__(self, conn_str, api_version):
+        """Constructor."""
+        self.conn_str = conn_str
+        self.api_version = api_version
 
-    @property
-    def host(self):
-        """Returns current host address."""
-        return self._host
-
-    @property
-    def port(self):
-        return self._port
-
-    @property
-    def conn_str(self):
-        """Returns complete connection string."""
-        proto = 'https://' if self.use_ssl else 'http://'
-        return '{0}{1}:{2}'.format(proto, self.host, self.port)
-
-    def version(self, api_version):
-        """Calls core version api."""
-        return Version(self.conn_str, api_version).get_response()
+    def get_response(self):
+        """Send request, get response from api."""
+        resp = requests.get('{0}/api/{1}/version'.format(self.conn_str, self.api_version))
+        return resp.json()
