@@ -1,5 +1,5 @@
 """
-dirbspy client module.
+dirbspy clients package.
 
 MIT License
 
