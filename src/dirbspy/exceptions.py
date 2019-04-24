@@ -23,3 +23,46 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
+
+class DIRBSPyException(Exception):
+    """Exception to raise when DIRBS returns a non-ok http status code."""
+
+
+class HTTPError(DIRBSPyException):
+    """Exception raise when DIRBS returns a non-ok http status code."""
+
+    @property
+    def status_code(self):
+        """Http status code of the error."""
+        return self.args[0]
+
+    @property
+    def error_message(self):
+        """A string error message."""
+        return self.args[1]
+
+    @property
+    def error_info(self):
+        """dict of returned error from DIRBS."""
+        return self.args[2]
+
+
+class ConnError(HTTPError):
+    """Error raised when there was an exception when talking to DIRBS."""
+
+
+class SSLError(ConnError):
+    """Error raised when encountering ssl errors."""
+
+
+class ConnTimeoutError(ConnError):
+    """Raised when a network timeout encountered."""
+
+
+class NotFoundError(HTTPError):
+    """Raised when a 404 error encountered."""
+
+
+class RequestError(HTTPError):
+    """Raised when a 400 error encountered."""
