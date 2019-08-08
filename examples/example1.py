@@ -1,4 +1,5 @@
 from dirbspy import Core
 
 core = Core()
-print(core.version('v1'))
+print(core.imei('v1', '1122131231312'))
+print(core.msisdn('v1', '234234234234'))

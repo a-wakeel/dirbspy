@@ -23,7 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from ..apis.version import Version
+from dirbspy.apis import *
 
 
 class Core(object):
@@ -56,3 +56,11 @@ class Core(object):
     def version(self, api_version):
         """Calls core version api."""
         return Version(self.conn_str, api_version).get_response()
+
+    def imei(self, api_version, imei):
+        """Calls core imei_api."""
+        return IMEI(self.conn_str, api_version, imei).get_response()
+
+    def msisdn(self, api_version, msisdn):
+        """Calls msisdn api."""
+        return MSISDN(self.conn_str, api_version, msisdn).get_response()

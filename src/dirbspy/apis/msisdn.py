@@ -1,5 +1,5 @@
 """
-dirbspy apis packages.
+dirbspy core msisdn api module.
 
 MIT License
 
@@ -23,6 +23,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from dirbspy.apis.imei import IMEI
-from dirbspy.apis.msisdn import MSISDN
-from dirbspy.apis.version import Version
+import requests
+
+
+class MSISDN:
+    """Implements core msisdn apis."""
+
+    def __init__(self, conn_str, api_version, msisdn):
+        """Constructor."""
+        self.conn_str = conn_str
+        self.api_version = api_version
+        self.msisdn = msisdn
+
+    def get_response(self):
+        """Return api response back."""
+        return requests.get(
+            '{conn_str}/api/{ver}/msisdn/{msisdn}'.format(
+                conn_str=self.conn_str,
+                ver=self.api_version,
+                msisdn=self.msisdn
+            )
+        ).json()
