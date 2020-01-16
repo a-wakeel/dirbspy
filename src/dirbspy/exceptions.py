@@ -28,6 +28,9 @@ SOFTWARE.
 class DIRBSPyException(Exception):
     """Exception to raise when DIRBS returns a non-ok http status code."""
 
+class InvalidArgumentException(DIRBSPyException):
+    """Exception to raise when arguments supplied are not expected ones."""
+
 
 class HTTPError(DIRBSPyException):
     """Exception raise when DIRBS returns a non-ok http status code."""
