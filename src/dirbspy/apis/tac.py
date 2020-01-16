@@ -23,23 +23,40 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+import json
 import requests
+
+from dirbspy.exceptions import InvalidArgumentException
 
 class TAC:
     """Implements core TAC apis."""
 
-    def __init__(self, conn_str, api_version, tac):
+    def __init__(self, conn_str, api_version):
         """Constructor."""
         self.conn_str = conn_str
         self.api_version = api_version
-        self.tac = tac
 
-    def get_response(self):
-        """Return api response back."""
-        return requests.get(
-            '{conn_str}/api/{ver}/tac/{tac}'.format(
+    def get(self, tac):
+        """TAC Api get method."""
+        if len(tac) == 8:
+            return requests.get(
+                '{conn_str}/api/{ver}/tac/{tac}'.format(
+                    conn_str=self.conn_str,
+                    ver = self.api_version,
+                    tac = tac
+                )
+            ).json()
+        raise InvalidArgumentException('TAC length must be 8 digits')
+
+    def post(self, tacs):
+        """TAC api post method for batch TACs."""
+        if not isinstance(tacs, list):
+            raise InvalidArgumentException('list of tacs is expected')
+        elif len(tacs) == 0:
+            raise InvalidArgumentException('list should contain at-least one TAC')
+        else:
+            return requests.post('{conn_str}/api/{ver}/tac'.format(
                 conn_str=self.conn_str,
-                ver = self.api_version,
-                tac = self.tac
-            )
-        ).json()
+                ver = self.api_version
+            ), data=json.dumps(tacs)).json()
+

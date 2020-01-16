@@ -26,3 +26,4 @@ SOFTWARE.
 from dirbspy.apis.imei import IMEI
 from dirbspy.apis.msisdn import MSISDN
 from dirbspy.apis.version import Version
+from dirbspy.apis.tac import TAC
