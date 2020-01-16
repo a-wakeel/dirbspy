@@ -42,21 +42,20 @@ class TAC:
             return requests.get(
                 '{conn_str}/api/{ver}/tac/{tac}'.format(
                     conn_str=self.conn_str,
-                    ver = self.api_version,
-                    tac = tac
+                    ver=self.api_version,
+                    tac=tac
                 )
             ).json()
         raise InvalidArgumentException('TAC length must be 8 digits')
 
     def post(self, tacs):
         """TAC api post method for batch TACs."""
-        if not isinstance(tacs, list):
+        if not isinstance(tacs, list):   # pylint: disable=no-else-raise
             raise InvalidArgumentException('list of tacs is expected')
         elif len(tacs) == 0:
             raise InvalidArgumentException('list should contain at-least one TAC')
         else:
             return requests.post('{conn_str}/api/{ver}/tac'.format(
                 conn_str=self.conn_str,
-                ver = self.api_version
+                ver=self.api_version
             ), data=json.dumps(tacs)).json()
-

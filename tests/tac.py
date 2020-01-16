@@ -1,5 +1,5 @@
 """
-Fixtures modules for tests.
+TAC APi tests.
 
 MIT License
 
@@ -23,13 +23,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-import re
-import json
 import pytest
-import httpretty
 
-responses = {
-    'tac_get': {
+from fixtures import *
+from dirbspy import Core
+from dirbspy.exceptions import InvalidArgumentException
+
+
+def test_tac_get_method(dirbs_mock_server):
+    """Verify the tac api get method."""
+    core = Core()
+    res = core.tac(12345678)
+
+    expected_response = {
             "gsma": {
                 "allocation_date": "string",
                 "bands": "string",
@@ -54,8 +60,16 @@ responses = {
                 "wlan": "string"
             },
             "tac": "string"
-        },
-    'tac_post': {
+        }
+    assert res == expected_response
+
+
+def test_tac_post_method(dirbs_mock_server):
+    """Verify tac api post method."""
+    core = Core()
+    res = core.tac([12345678, 12345678])
+
+    expected_response = {
         "results": [
             {
                 "gsma": {
@@ -85,30 +99,26 @@ responses = {
             }
         ]
     }
-}
+
+    assert res == expected_response
 
 
-@pytest.yield_fixture(scope='session')
-def dirbs_mock_server():
-    """MOCK server fixture for DIRBS."""
-    httpretty.enable()
+def test_tac_api_validations(dirbs_mock_server):
+    """Verify that the tac api do validations."""
+    core = Core()
 
-    # DIRBS TAC GET API mock
-    httpretty.register_uri(
-        httpretty.GET,
-        re.compile(r'\S/tac/\d'),
-        body=json.dumps(responses.get('tac_get')),
-        content_type='application/json'
-    )
+    # if length is less than 8
+    with pytest.raises(InvalidArgumentException):
+        res = core.tac(1234)
 
-    # DIRBS TAC POST API mock
-    httpretty.register_uri(
-        httpretty.POST,
-        re.compile(r'\S/tac'),
-        body=json.dumps(responses.get('tac_post')),
-        content_type='application/json'
-    )
+    # if length is greater than 8
+    with pytest.raises(InvalidArgumentException):
+        res = core.tac(1234567896)
 
-    yield
-    httpretty.disable()
-    httpretty.reset()
+    # if not list in post tac
+    with pytest.raises(InvalidArgumentException):
+        res = core.tac({'a': 12345678})
+
+    # if list is empty
+    with pytest.raises(InvalidArgumentException):
+        res = core.tac([])

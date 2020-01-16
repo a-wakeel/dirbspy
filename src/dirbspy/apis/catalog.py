@@ -43,12 +43,12 @@ class CATALOG:
 
         # TODO: add more validation checks on args
 
-        if order and order not in ['ASC', 'DESC']:
+        if order and order not in ['ASC', 'DESC']:  # pylint: disable=no-else-raise
             raise InvalidArgumentException('order should be one of (ASC, DESC)')
         else:
             self.order = order
 
-        if file_type and file_type not in ['operator', 'gsma_tac', 'stolen_list',
+        if file_type and file_type not in ['operator', 'gsma_tac', 'stolen_list',   # pylint: disable=no-else-raise
                              'pairing_list', 'registration_list', 'golden_list']:
             raise InvalidArgumentException('file type should be one of '
                                            '(operator, gsma_tac, stolen_list, '
@@ -73,4 +73,3 @@ class CATALOG:
                 order=self.order
             )
         ).json()
-

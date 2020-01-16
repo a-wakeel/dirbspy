@@ -25,8 +25,6 @@ SOFTWARE.
 """
 import requests
 
-from dirbspy.exceptions import ConnError
-
 
 class Version:
     """Implements core version apis."""

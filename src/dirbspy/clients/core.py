@@ -24,10 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 from dirbspy.exceptions import InvalidArgumentException
-from dirbspy.apis import *
+from dirbspy.apis import Version, MSISDN, IMEI, TAC
 
 
-class Core(object):
+class Core:
     """Http client implementation for DIRBS Core."""
 
     def __init__(self, host='localhost', port=5000, use_ssl=False, api_version='v2'):
