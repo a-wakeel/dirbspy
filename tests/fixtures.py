@@ -96,7 +96,7 @@ def dirbs_mock_server():
     # DIRBS TAC GET API mock
     httpretty.register_uri(
         httpretty.GET,
-        re.compile(r'\S/tac/\d'),
+        re.compile(r'http://localhost:5000/api/v2/tac/\d'),
         body=json.dumps(responses.get('tac_get')),
         content_type='application/json'
     )
@@ -104,7 +104,7 @@ def dirbs_mock_server():
     # DIRBS TAC POST API mock
     httpretty.register_uri(
         httpretty.POST,
-        re.compile(r'\S/tac'),
+        'http://localhost:5000/api/v2/tac',
         body=json.dumps(responses.get('tac_post')),
         content_type='application/json'
     )
