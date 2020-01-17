@@ -59,9 +59,21 @@ class Core:
         """Calls core version api."""
         return Version(self.conn_str, self.api_version).get_response()
 
-    def imei(self, imei):
-        """Calls core imei_api."""
-        return IMEI(self.conn_str, self.api_version, imei).get_response()
+    def imei(self, imeis, include_registration_status=False,
+             include_stolen_status=False, pairings=False, subscribers=False):
+        """Calls core IMEI APIs."""
+        if isinstance(imeis, int):
+            if pairings:
+                return IMEI(self.conn_str, self.api_version).get_imei_pairings(imeis)
+            if subscribers:
+                return IMEI(self.conn_str, self.api_version).get_imei_subscribers(imeis)
+            return IMEI(self.conn_str, self.api_version).get_imei(imeis,
+                                                                  include_registration_status,
+                                                                  include_stolen_status)
+        if isinstance(imeis, list):
+            return IMEI(self.conn_str, self.api_version).get_imeis(imeis,
+                                                                   include_registration_status,
+                                                                   include_stolen_status)
 
     def msisdn(self, msisdn):
         """Calls msisdn api."""
@@ -70,9 +82,9 @@ class Core:
     def tac(self, tacs):
         """Calls tac apis."""
         if isinstance(tacs, int):
-            return TAC(self.conn_str, self.api_version).get(str(tacs))
+            return TAC(self.conn_str, self.api_version).get_tac(str(tacs))
         elif isinstance(tacs, list):
-            return TAC(self.conn_str, self.api_version).post(tacs)
+            return TAC(self.conn_str, self.api_version).get_tacs(tacs)
         else:
             raise InvalidArgumentException('Invalid argument type: {type} expected types are: int, list'.format(
                 type=type(tacs)))

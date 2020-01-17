@@ -28,6 +28,7 @@ import requests
 
 from dirbspy.exceptions import InvalidArgumentException
 
+
 class TAC:
     """Implements core TAC apis."""
 
@@ -36,7 +37,7 @@ class TAC:
         self.conn_str = conn_str
         self.api_version = api_version
 
-    def get(self, tac):
+    def get_tac(self, tac):
         """TAC Api get method."""
         if len(tac) == 8:
             return requests.get(
@@ -48,7 +49,7 @@ class TAC:
             ).json()
         raise InvalidArgumentException('TAC length must be 8 digits')
 
-    def post(self, tacs):
+    def get_tacs(self, tacs):
         """TAC api post method for batch TACs."""
         if not isinstance(tacs, list):   # pylint: disable=no-else-raise
             raise InvalidArgumentException('list of tacs is expected')
